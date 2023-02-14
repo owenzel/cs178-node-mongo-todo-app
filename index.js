@@ -3,27 +3,30 @@ const app = express();
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 
+// CONCEPT: Schema
 // models
 const TodoTask = require("./models/TodoTask");
 
 dotenv.config();
 
+// CONCEPT: Middleware
 app.use("/static", express.static("public"));
 
+// CONCEPT: Middleware
 // urlencoded allows us to extract data from the form by adding it to the body property of the request
 app.use(express.urlencoded({ extended: true }));
 
 // connection to db
 mongoose.connect(process.env.DB_CONNECT, { useNewUrlParser: true }, () => {
-    console.log("Connected to db!");
     // Dedicate a port # & tell our express app to listen to that port
     app.listen(3000, () => console.log("Server up and running"));
 })
 
-
+// CONCEPT: Template Engine
 // view engine configuration
 app.set("view engine", "ejs");
 
+// CONCEPT: Routing
 app.get('/', (req,res) => {
     // Read from the database
     TodoTask.find({}, (err, tasks) => {
@@ -31,6 +34,7 @@ app.get('/', (req,res) => {
     });
 });
 
+// CONCEPT: Routing
 // For creating tasks
 app.post('/', async (req, res) => {
     const todoTask = new TodoTask({
@@ -46,11 +50,11 @@ app.post('/', async (req, res) => {
     }
 });
 
+// CONCEPT: Routing
 // For editing tasks
 app
 .route("/edit/:id")
 .get((req, res) => {
-    // find the id and render the new template
     const id = req.params.id;
 
     TodoTask.find({}, (err, tasks) => {
@@ -68,6 +72,7 @@ app
     })
 });
 
+// CONCEPT: Routing
 // For deleting tasks
 app.route("/remove/:id").get((req, res) => {
     const id = req.params.id;

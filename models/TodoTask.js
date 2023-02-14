@@ -1,3 +1,4 @@
+// CONCEPT: Schema
 const mongoose = require('mongoose');
 
 const todoTaskSchema = new mongoose.Schema({
